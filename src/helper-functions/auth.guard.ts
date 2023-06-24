@@ -19,6 +19,7 @@ import {
       if (!req.headers.authorization) {
         Exceptions.sendUnauthorizedException('No token was provied')
       }
+      
       try {
         const decodedToken: Object = jwt.verify(
           req.headers.authorization,

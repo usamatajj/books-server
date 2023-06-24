@@ -15,6 +15,7 @@ import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 export class LoginDTO {
     @IsNotEmpty()
     @IsString()
+    @ApiProperty({ example: '+923038434882'})
     mobile: string;
 
 }

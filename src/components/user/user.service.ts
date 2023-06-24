@@ -33,9 +33,13 @@ export class UserService {
 
   async getCheatToken(phone) {
     let user = await User.findOne({ phone });
-     let token = getToken(phone)
+    if(user == null) {
+
+      return {status : 500 , message : "User Not found"}
+    }
+     let token = await getToken(phone);
      
-    return { status :200 , message: "approved", token }
+     return { status :200 , message: "approved", token }
   }
 
   async login(obj: LoginDTO) {
