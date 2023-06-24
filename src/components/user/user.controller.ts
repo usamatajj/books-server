@@ -25,15 +25,25 @@ export class UserController {
     constructor(private readonly service: UserService) { }
 
 
+    @Post('/login')
+    @ApiBody({ type: LoginDTO })   
+    async login(@Body() obj: LoginDTO, @Response() res, @Request() req) {
+        const response = await this.service.login(obj);
 
-    @Post('/send-verification-code') 
-    @ApiOkResponse({type:SendVerificationCodeResponse})
-    async sendverificationcode(@Body() dto: SendVerificationCodeDto, @Response() res, @Request() req) {
-        const response = await sendVerificationCode(dto.mobile);
         return res.status(HttpStatus.OK).json({
             ...response
         });
     }
+
+
+    // @Post('/send-verification-code') 
+    // @ApiOkResponse({type:SendVerificationCodeResponse})
+    // async sendverificationcode(@Body() dto: SendVerificationCodeDto, @Response() res, @Request() req) {
+    //     const response = await sendVerificationCode(dto.mobile);
+    //     return res.status(HttpStatus.OK).json({
+    //         ...response
+    //     });
+    // }
 
     @Post('/verify-verification-code')
     @ApiOkResponse({type: VerifyVerificationCodeResponse})
@@ -44,24 +54,6 @@ export class UserController {
         });
     }
 
-    @Post('/signup')
-    async signup(@Body() signupObj: SignupDto, @Response() res, @Request() req) {
-        const response = await this.service.signup(signupObj);
-
-        return res.status(HttpStatus.OK).json({
-            ...response
-        });
-    }
-
-    @Post('/login')
-    @ApiBody({ type: LoginDTO })   
-    async login(@Body() obj: LoginDTO, @Response() res, @Request() req) {
-        const response = await this.service.login(obj);
-
-        return res.status(HttpStatus.OK).json({
-            ...response
-        });
-    }
 
     @Post('/get-cheat-token')
     @ApiBody({ type: LoginDTO })
@@ -77,6 +69,16 @@ export class UserController {
     @ApiBody({ type: LoginDTO })
     async getUserInfo(@Body() obj: LoginDTO, @Response() res, @Request() req) {
         const response = await this.service.getUserInfo(obj.mobile);
+        return res.status(HttpStatus.OK).json({
+            ...response
+        });
+    }
+
+
+    @Post('/signup-admin')
+    async signup(@Body() signupObj: SignupDto, @Response() res, @Request() req) {
+        const response = await this.service.signup(signupObj);
+
         return res.status(HttpStatus.OK).json({
             ...response
         });

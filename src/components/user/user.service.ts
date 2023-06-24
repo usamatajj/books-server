@@ -45,7 +45,9 @@ export class UserService {
   async login(obj: LoginDTO) {
         let user = await User.findOne({ phone: obj.mobile });
         if (user == null) {
-          return { status: 500, message: 'user doesnot exist' };
+          let user = new User(obj);
+          user.userType = "STUDENT";
+          await user.save();
         }
     
         const response = await sendVerificationCode(obj.mobile);
