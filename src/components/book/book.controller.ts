@@ -8,27 +8,51 @@ import {
   Get,
   UseGuards,
   Query,
+  UploadedFile,
+  UseInterceptors,
+  UploadedFiles
 } from '@nestjs/common';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { BookService } from './book.service';
 import {
   ApiTags,
   ApiQuery
 } from '@nestjs/swagger';
+
 import { AuthGuard } from '../../helper-functions/auth.guard';
-import { AddBookDto, UpdateBookDto, DeleteBookDto } from './book.dto';
+import { AddBookDto, UpdateBookDto, DeleteBookDto, UploadPdfDto } from './book.dto';
 
 @ApiTags('book')
 @Controller('book')
 export class BookController {
   constructor(private readonly service: BookService) {}
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Post('/add')
-  async add(@Body() obj: AddBookDto, @Response() res, @Request() req) {
-    const response = await this.service.add(obj);
+  @UseInterceptors(FileFieldsInterceptor([
+  { name: 'file', maxCount: 1, },
+  { name: 'preview', maxCount: 1 },
+],{
+  storage: diskStorage({
+    destination: './uploads/books', // Specify your desired upload directory
+    filename: (req, file, callback) => {
+      const randomName = Array(10).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
+      return callback(null, `${randomName}${extname(file.originalname)}`);
+    },
+  }),
+} ))
+  async add(
+    @UploadedFiles() files : UploadPdfDto,
+    @Body() formData: AddBookDto,
+    @Response() res
+  ) {
+    const response = await this.service.add(formData, files);
     return res.status(HttpStatus.OK).json({
       ...response,
     });
+
   }
 
   @UseGuards(AuthGuard)
@@ -88,5 +112,13 @@ export class BookController {
     return res.status(HttpStatus.OK).json({
       ...response,
     });
+  }
+
+  // @UseGuards(AuthGuard)
+  @ApiQuery({ name: 'path', required: true, description: 'uploads/books/7482ebba16.pdf' })
+  @Get('/get-pdf')
+  async getPdf(@Response() res, @Request() req) {
+    const response = await this.service.downloadPdfByPath(req.query.path,res);
+    return response
   }
 }

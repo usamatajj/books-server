@@ -1,4 +1,5 @@
 import { model, Schema, Model, Document } from 'mongoose';
+import mongoose from "mongoose"
 
 const bookSchema = new Schema({
 
@@ -15,9 +16,29 @@ const bookSchema = new Schema({
     type: String
   },
 
-  boardId: { type: Schema.Types.ObjectId, ref: 'Board' },
+  boardId: { type: Schema.Types.String, 
+    ref: 'Board',
+    required: true,
+    validate: {
+      validator: async function (value) {
+        const doc = await mongoose.model('Board').findById(value);
+        return doc !== null;
+      },
+      message: 'Board does not exist.',
+    },
+  },
 
-  classId: { type: Schema.Types.ObjectId, ref: 'Class' },
+  classId: { type: Schema.Types.String, 
+    ref: 'Class',
+    required: true,
+    validate: {
+      validator: async function (value) {
+        const doc = await mongoose.model('Class').findById(value);
+        return doc !== null;
+      },
+      message: 'Class does not exist.',
+    },
+  },
 
   status :{
     type :String,
@@ -27,7 +48,6 @@ const bookSchema = new Schema({
   image:{
     type : String
   },
-
   previewPath: {
     type: String
   },

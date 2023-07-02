@@ -44,6 +44,15 @@ export class AddBookDto {
 
 }
 
+export class UploadPdfDto {
+    @IsNotEmpty()
+    file
+
+    @IsNotEmpty()
+    preview
+
+}
+
 export class UpdateBookDto {
     @ApiProperty({ example: '_id here' })
     @IsNotEmpty()

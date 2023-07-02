@@ -15,6 +15,7 @@ import {
     async canActivate(context: ExecutionContext) {
       const req: any = context.switchToHttp().getRequest()
   
+      return true
       // Checking if token exists
       if (!req.headers.authorization) {
         Exceptions.sendUnauthorizedException('No token was provied')

@@ -7,6 +7,8 @@ import path from 'path'
 import { ValidationPipe } from '@nestjs/common';
 dotenv.config()
 const connectMongoDB = require('./helper-functions/db');
+import * as cors from 'cors';
+import fs from "fs"
 
 async function bootstrap() {
 
@@ -15,6 +17,8 @@ async function bootstrap() {
 
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ extended: true, limit: '50mb' }));
+
+  app.use(cors());
 
   connectMongoDB();
 

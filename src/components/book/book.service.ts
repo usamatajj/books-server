@@ -1,6 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Book } from 'src/Models/Book';
 import { AddBookDto, UpdateBookDto , DeleteBookDto } from './book.dto';
+import { existsSync } from 'fs';
+import {join} from 'path'
 
 @Injectable()
 export class BookService {
@@ -25,10 +27,22 @@ export class BookService {
     return { status: 200, data: entity };
   }
 
-  async add(obj: AddBookDto) {
-    let entity = new Book(obj);
-    await entity.save()
-    return {status : 200, message :"Board Saved Successfully!"}
+  async add(obj: AddBookDto, files) {
+    try{
+      if(!files || !files.file || !files.preview ) {
+        return { status: 500 , message : "Please Upload file and preview correctly"}
+      }
+  
+      let entity = new Book(obj);
+      entity.pdfPath = files.file[0].path
+      entity.previewPath = files.preview[0].path
+  
+      await entity.save()
+      return {status : 200, message :"Entity Saved Successfully!"}
+    }catch(err) {
+      return {status : 500, message : err.message}
+    }
+  
   }
 
   async delete(obj: DeleteBookDto) {
@@ -39,5 +53,21 @@ export class BookService {
   async update(obj: UpdateBookDto) {
     let entity = await Book.updateOne({_id: obj._id}, obj);
     return {status : 200 , message: "Entity updated successfully"}
+  }
+
+  async downloadPdfByPath(path, res) {
+    try{
+      const rootFolder = process.cwd();
+      const filePath = join(rootFolder, path);
+      if (existsSync(filePath)) {
+        res.sendFile(filePath);
+      } else {
+        throw new NotFoundException('File not found');
+      }
+    }catch(err) {
+      return {status : 500 , message : err.message}
+
+    }
+  
   }
 }
