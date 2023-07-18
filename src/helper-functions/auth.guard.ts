@@ -21,13 +21,13 @@ import {
       }
       
       try {
-        const decodedToken: Object = jwt.verify(
+        const decodedToken: any = jwt.verify(
           req.headers.authorization,
           process.env.JWT_SECRET_KEY
         )
   
   
-        const user = await this.userService.getUserInfo({ phone: decodedToken['phone'] })
+        const user = await this.userService.getUserInfo( decodedToken.phone)
   
         if (!user) {
           Exceptions.sendUnauthorizedException('Invalid token')

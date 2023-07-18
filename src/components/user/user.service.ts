@@ -26,7 +26,7 @@ export class UserService {
     return { status: 200, message: 'User Sign up successful' };
   }
 
-  async getUserInfo(phone) {
+  async  getUserInfo(phone) {
     let user = await User.findOne({ phone });
     return { status :200 , data :user }
   }
