@@ -6,14 +6,19 @@ const boardSchema = new Schema({
     default: () => Math.random().toString(36).substring(2), // Generates a random string
   },
   boardName: {
-    type: String
+    type: String,
   },
   image: {
-    type: String
+    type: String,
   },
 
+  description: {
+    type: String,
+  },
+
+  region: {
+    type: String,
+  },
 });
-
-
 
 export const Board = model('Board', boardSchema);
