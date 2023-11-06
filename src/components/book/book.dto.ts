@@ -18,7 +18,6 @@ export class AddBookDto {
   bookName: string;
 
   @ApiProperty({ example: 'base64' })
-  @IsNotEmpty()
   @IsString()
   image: string;
 
@@ -39,18 +38,12 @@ export class AddBookDto {
   quantityAvailable: number;
 
   @ApiProperty({ example: 'PDF Path' })
-  @IsString()
-  @IsNotEmpty()
   pdfPath: string;
 
   @ApiProperty({ example: 'preview Path' })
-  @IsString()
-  @IsNotEmpty()
-  previewPath: string;
+  previewPath: any;
 
   @ApiProperty({ example: 'Book Status' })
-  @IsString()
-  @IsNotEmpty()
   status: string;
 }
 
@@ -95,13 +88,9 @@ export class UpdateBookDto {
   quantityAvailable: number;
 
   @ApiProperty({ example: 'PDF Path' })
-  @IsString()
-  @IsNotEmpty()
   pdfPath: string;
 
   @ApiProperty({ example: 'preview Path' })
-  @IsString()
-  @IsNotEmpty()
   previewPath: string;
 
   @ApiProperty({ example: 'Book Status' })

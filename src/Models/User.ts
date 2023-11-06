@@ -6,24 +6,23 @@ const userSchema = new Schema({
     default: () => Math.random().toString(36).substring(2), // Generates a random string
   },
   userName: {
-    type: String
+    type: String,
   },
   phone: {
-    type: String
+    type: String,
   },
 
-  status :{
-    type :String,
-    default: 'active'
+  status: {
+    type: String,
+    default: 'active',
   },
 
   userType: {
-    type: String
+    type: String,
   },
 
-  profilePic: { type: String},
+  profilePic: { type: String },
   purchasedBooks: { type: Schema.Types.ObjectId, ref: 'Book' },
-
 });
 
 export const User = model('User', userSchema);

@@ -14,7 +14,7 @@ const classSchema = new Schema({
   description: {
     type: String,
   },
-  gradee: {
+  grade: {
     type: String,
   },
 });

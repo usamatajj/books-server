@@ -17,11 +17,6 @@ export class AddClassDto {
   @IsString()
   className: string;
 
-  @ApiProperty({ example: 'base64' })
-  @IsNotEmpty()
-  @IsString()
-  image: string;
-
   @ApiProperty({ example: 'This is description for class' })
   @IsNotEmpty()
   @IsString()
@@ -44,15 +39,15 @@ export class UpdateClassDto {
   @IsString()
   className: string;
 
-  @ApiProperty({ example: 'base64' })
-  @IsNotEmpty()
-  @IsString()
-  image: string;
-
   @ApiProperty({ example: 'This is description for class' })
   @IsNotEmpty()
   @IsString()
   description: string;
+
+  @ApiProperty({ example: 'HSSC_I' })
+  @IsNotEmpty()
+  @IsString()
+  grade: string;
 }
 
 export class DeleteClassDto {
